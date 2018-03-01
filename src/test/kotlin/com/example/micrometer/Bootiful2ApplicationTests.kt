@@ -1,4 +1,4 @@
-package com.example.bootiful2
+package com.example.micrometer
 
 import org.junit.Test
 import org.junit.runner.RunWith
