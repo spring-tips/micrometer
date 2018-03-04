@@ -5,8 +5,6 @@ import com.sun.net.httpserver.HttpServer
 import io.micrometer.atlas.AtlasMeterRegistry
 import io.micrometer.core.instrument.Clock
 import io.micrometer.core.instrument.MeterRegistry
-import io.micrometer.influx.InfluxConfig
-import io.micrometer.influx.InfluxMeterRegistry
 import io.micrometer.prometheus.PrometheusConfig
 import io.micrometer.prometheus.PrometheusMeterRegistry
 import org.apache.commons.logging.LogFactory
@@ -68,8 +66,8 @@ fun main(args: Array<String>) {
 		// http://micrometer.io/docs/registry/prometheus
 		val registry = PrometheusMeterRegistry(PrometheusConfig.DEFAULT);
 		val server = HttpServer.create(InetSocketAddress(8080), 0)
-		server.createContext("/prometheus") { httpExchange ->
-			log.info("new request on /prometheus")
+		server.createContext("/actuator/prometheus") { httpExchange ->
+			log.info("new request on /actuator/prometheus")
 			val response = registry.scrape()
 			httpExchange.sendResponseHeaders(200, response.length.toLong())
 			httpExchange.responseBody.use {
@@ -80,6 +78,7 @@ fun main(args: Array<String>) {
 		exercise(registry)
 	}
 
+/*
 	fun influx() {
 		// https://www.influxdata.com/time-series-platform/
 		// https://github.com/influxdata/sandbox
@@ -91,9 +90,10 @@ fun main(args: Array<String>) {
 		val registry = InfluxMeterRegistry(config, Clock.SYSTEM)
 		exercise(registry)
 	}
+*/
 
-	influx()
+//	influx()
 //	atlas()
-//	prometheus()
+	prometheus()
 }
 
