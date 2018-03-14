@@ -2,26 +2,28 @@ package micrometer.boot;
 
 import io.micrometer.core.instrument.MeterRegistry;
 import io.micrometer.core.instrument.Timer;
-import io.micrometer.core.instrument.simple.SimpleMeterRegistry;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.reactivestreams.Publisher;
 import org.reactivestreams.Subscriber;
 import org.reactivestreams.Subscription;
-import reactor.core.publisher.Flux;
 
 import java.time.Duration;
 import java.util.concurrent.atomic.AtomicReference;
 
-public class MeasuredPublishers {
 
-	private static Log log = LogFactory.getLog(MeasuredPublishers.class);
+/**
+ * @author <a href="mailto:josh@joshlong.com">Josh Long</a>
+ */
+public class MeasuredPublishers {
 
 	public static <T> Publisher<T> from(
 			MeterRegistry mr,
 			String measureKey,
 			Publisher<T> publisher) {
-		
+
+		Log log = LogFactory.getLog(MeasuredPublishers.class);
+
 		return delegateSubscriber -> publisher.subscribe(new Subscriber<T>() {
 
 			private final AtomicReference<Timer.Sample> sampleAtomicReference = new AtomicReference<>();
@@ -39,7 +41,7 @@ public class MeasuredPublishers {
 			@Override
 			public void onSubscribe(Subscription s) {
 				delegateSubscriber.onSubscribe(s);
-				log.info("onSubscribe()");
+				log.info("onSubscribe(s)");
 				sampleAtomicReference.set(Timer.start(mr));
 			}
 
