@@ -41,7 +41,7 @@ public class MeasuredPublishers {
 			@Override
 			public void onSubscribe(Subscription s) {
 				delegateSubscriber.onSubscribe(s);
-				log.info("onSubscribe(s)");
+				log.debug("onSubscribe(s)");
 				sampleAtomicReference.set(Timer.start(mr));
 			}
 
@@ -49,7 +49,7 @@ public class MeasuredPublishers {
 			public void onComplete() {
 				delegateSubscriber.onComplete();
 				long stopNs = sampleAtomicReference.get().stop(mr.timer(measureKey));
-				log.info("onComplete(): " + Duration.ofNanos(stopNs).toMillis() + "ms");
+				log.debug("onComplete(): " + Duration.ofNanos(stopNs).toMillis() + "ms");
 			}
 		});
 	}
